@@ -1,0 +1,25 @@
+<?php
+$this->headScript()->appendFile($this->basepath('/Core/js/core.pagination-container.js'));
+$this->headTitle($this->translate('Resumes'));
+?>
+
+<h1><?php echo $this->translate("list of all resumes") ?></h1>
+
+<?php echo $this->flashMessenger()->render('default', array('alert', 'alert-success')) ?>
+
+<nav class="navbar yk-toolbar" id="cv-list-filter-wrapper">
+    <?php echo $this->searchForm($this->filterForm) ?>
+</nav>
+<div
+    id="cv-list-container"
+    class="pagination-container"
+    data-message="<?php echo $this->escapeHtmlAttr(sprintf(
+        $this->translate('%sSorry%s, there are not any resumes matching your search criteria.'),
+        '<strong>', '</strong>'
+    )) ?>"
+    data-uri="<?php
+    echo $this->url('lang/cvs', array(), array('query' => $this->params()->fromQuery()), true)?>">
+    <div class="pagination-content">
+        <?php echo $this->render('cv/index/index.ajax.phtml') ?>
+    </div>
+</div>

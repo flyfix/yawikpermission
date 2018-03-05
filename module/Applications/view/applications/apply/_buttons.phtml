@@ -1,0 +1,88 @@
+<?php
+/**
+ * YAWIK
+ *
+ * @filesource
+ * @copyright (c) 2013 - 2016 Cross Solution (http://cross-solution.de)
+ * @license   MIT
+ * @author Mathias Gelhausen <gelhausen@cross-solution.de>
+ */
+$this->headScript()->appendFile($this->basePath('Applications/js/application.form.js'));
+$applyUrl = $this->url('lang/apply', array('applyId' => $this->application->getJob()->getApplyId()), true);
+$isApplicationValid = $this->services('ValidatorManager.Applications/Application')->isValid($this->application);
+$job=$this->application->getJob(); /* @var Jobs\Entity\Job $job */
+?>
+
+<div id="send-application-buttons">
+    <nav class="navbar">
+
+        <?php
+        echo $this->alert()->warning(
+            $this->translate('Your application is incomplete. You have to add your contact data and accept the privacy policy to be able to submit the application. You can always preview or abort your application.'),
+            array(
+                'dismissable' => false,
+                'id'          => 'application_incomplete',
+                'class'       => $isApplicationValid ? 'hidden' : '',
+            )
+        );
+        ?>
+
+        <?php if (!$job->getAtsEnabled()):?>
+         <!-- ATS Disabled -->
+        <?php endif;?>
+
+
+<?php
+if ($this->isPreview):
+?>
+        <a href="<?php echo $applyUrl ?>" id="back-to-application" class="btn btn-lg btn-default">
+            <?php echo $this->translate('Back to the formular') ?>
+        </a>
+<?php
+else:
+    // there are four options for jobs, and how to handle them
+    // - none    = should NOT show up here, you shouldn't be able to apply on this job at all
+    // - email   = this job is handled in this system, the application NOT, everything with this application is done by mails
+    // - extern  = should NOT show up here, job is handled here, application on this job (including the form) is somewhere else
+    // - intern  = the application is handled here
+    // so essential only 'intern' and 'email' will be handled here
+    $atsMode = 'intern';
+    if ($job && is_object($job->getAtsMode()) && !empty($job->getAtsMode()->getMode())) {
+        if ($job->getAtsMode()->getMode() == 'email') {
+            $atsMode = 'email';
+        }
+    }
+    if ($atsMode != 'email'):
+?>
+                <a href="<?php echo $this->url('lang/applications/detail', array('id' => $this->application->getId()), true) ?>" id="preview-application" class="btn btn-lg btn-default">
+                <?php echo $this->translate('Preview application') ?>
+
+                </a>
+                <a href="<?php echo $applyUrl ?>?do=send" id="send-application" class="btn btn-lg btn-primary<?php
+                echo $this->services('ValidatorManager.Applications/Application')->isValid($this->application)
+                    ? '' : ' hidden' ?>">
+                    <?php echo $this->translate('Send application') ?>
+                </a>
+<?php
+    else:
+
+?>
+                <a href="<?php echo $applyUrl ?>?do=previewmail" id="testmail-application-test" disabled=true class="btn btn-lg btn-default">
+                    <?php echo $this->translate('Send preview to my email') ?>
+                </a>
+                <a href="<?php echo $applyUrl ?>?do=sendmail" id="testmail-application-apply" disabled=true class="btn btn-lg btn-default">
+                    <?php echo $this->translate('Send application') ?>
+                </a>
+<?php
+    endif;
+endif;
+?>
+
+        <a href="<?php echo $applyUrl ?>?do=abort" id="abort-application" class="btn btn-lg btn-danger">
+            <?php echo $this->translate('Abort application') ?>
+        </a>
+
+    
+    </nav>
+</div>
+

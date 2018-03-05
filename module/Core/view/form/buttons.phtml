@@ -1,0 +1,29 @@
+<?php
+/* @var $fr Core\Form\View\Helper\FormRow */
+$fr = $this->formRow();
+$shouldWrap = $fr->shouldWrap();
+$fr->setShouldWrap(false);
+
+$attribs = $this->element->getAttributes();
+unset($attribs['name']);
+
+$class            = isset($attribs['class']) ? ' ' . $attribs['class'] : '';
+$attribs['class'] = 'buttons-bar form-group' . $class;
+
+$attrStr = $this->formInput()->createAttributesString($attribs);
+
+?>
+<div <?php echo $attrStr ?>>   
+        <div class="col-md-offset-3 col-md-9">
+        <?php $first=true; foreach($this->element as $button):?>
+
+            <?php
+            /* @var $button \Zend\Form\Element\Button */
+            $button->setAttribute('class', $button->getAttribute('class'));
+            ?>
+            <?php echo $this->formRow($button);?>
+        <?php endforeach;?>    
+        </div>
+</div>
+
+<?php $fr->setShouldWrap($shouldWrap); ?>

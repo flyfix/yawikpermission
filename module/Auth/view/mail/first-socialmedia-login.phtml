@@ -1,0 +1,40 @@
+<?php
+/**
+ * YAWIK
+ *
+ * Template for the mail which is send, if an user has logged in the first time via a
+ * social network (Facebook, LinkedIn, Xing)
+ *
+ * @filesource
+ * @license MIT
+ * @copyright  2013 - 2015 Cross Solution <http://cross-solution.de>
+ */
+?>
+<div class="yk-mail">
+<?php echo $this->partial('mail/header'); ?>
+<p>Hello <?= $this->displayName?>,</p>
+
+<p>Herzlich willkommen beim YAWIK demo. Sie haben sich das erste mal über <?= $this->provider?> angebeldet.</p>
+
+<p>
+    Wir haben für Sie Zugangsdaten generiert. Das soll Ihnen zeigen, dass Sie YAWIK auch ganz ohne
+    Sozialen Netzen nutzen können.
+</p>
+<p>
+    Ihre Rolle wurde auf "Rekruter" eingestellt. So können Sie Stellenanzeigen eingeben und Bewerbungen bearbeiten.
+    Das Ändern der Rolle ist zZ nur über die mongo console möglich.
+</p>
+
+
+<p>Benutzername: <?= $this->login ?><br>
+
+
+Kennwort: <?= $this->password ?></p>
+
+
+<p>Loggen Sie sich ein unter: <a href="<?php $url = $this->serverUrl() . $this->url('lang/auth', array('lang' => 'en')); echo $url; ?>"><?= $url ?></a></p>
+
+
+
+<?= $this->partial('mail/footer'); ?>
+</div>

@@ -1,0 +1,26 @@
+<?php
+/**
+ * YAWIK
+ *
+ * @filesource
+ * @copyright (c) 2013 - 2016 Cross Solution (http://cross-solution.de)
+ * @license   MIT
+ */
+
+$profile = $this->profile; /* @var \Auth\Entity\SocialProfiles\ProfileInterface $profile */
+?>
+<html>
+<head>
+<script src="<?php echo $this->basePath("/js/jquery.min.js");?>" type="text/javascript"></script>
+</head>
+<body>
+<h1><?php echo $this->profile->getName()?></h1>
+<script type="text/javascript">
+$(function() {
+	window.opener.$(window.opener.document).trigger('fetch_complete.socialprofiles');
+});
+</script>
+<textarea style="display:none"><?php echo $profile ? \Zend\Json\Json::encode($profile->getData()) : '' ?></textarea>
+</body>
+
+</html>

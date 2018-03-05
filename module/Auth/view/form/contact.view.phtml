@@ -1,0 +1,30 @@
+<?php
+/**
+ * YAWIK
+ *
+ * @filesource
+ * @copyright (c) 2013 - 2016 Cross Solution (http://cross-solution.de)
+ * @license   MIT
+ * @author Mathias Gelhausen <gelhausen@cross-solution.de>
+ */
+/**
+ * {{rtd: renders the contact information within the application form and the personal profile.}}
+ */
+ $info = $element->getObject(); /* @var \Auth\Entity\Info $info*/
+?>
+    <div class="row">
+        <div class="col-md-6">
+            <?php echo $this->translate($this->salutation($info->getGender()))?><br>
+            <strong><?php echo $info->getDisplayName()?></strong><br><br>
+            <adress>
+                <?php echo $info->getStreet()?> <?php echo $info->getHouseNumber()?><br>
+                <?php echo $info->getPostalCode()?> <?php echo $info->getCity()?><br>
+                <?php echo $info->getCountry()?>
+            </adress>
+        </div>
+        <div class="col-md-6">
+            <i class="yk-icon yk-icon-phone"></i> <?php echo $info->getPhone()?><br>
+            <i class="yk-icon yk-icon-envelope"></i> <?php echo $info->getEmail()?><br>
+        </div>
+    </div>
+

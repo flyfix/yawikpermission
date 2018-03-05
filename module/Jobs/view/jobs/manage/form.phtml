@@ -1,0 +1,194 @@
+<?php
+/**
+ * YAWIK
+ *
+ * @filesource
+ * @copyright (c) 2013 - 2016 Cross Solution (http://cross-solution.de)
+ * @license   MIT
+ */
+/**
+ * renders the form for entering a job opening
+ *
+ * NOTE: price for jobsintown is currently hardcoded. This will be replaced by
+ * a dynamic solution as soon there is a Channels module available
+ *
+ */
+
+$options = $this->services('Core/Options');
+$defaultCurrencyCode = $options->defaultCurrencyCode;
+$defaultTaxRate = $options->defaultTaxRate;
+
+$channels = $this->services('Jobs/Options/Provider');
+
+$this->headscript()->appendFile($this->basepath('Core/js/core.forms.js'));
+$this->headscript()->appendFile($this->basepath('Core/js/jquery.summary-form.js'));
+
+
+$total=0;
+$sum=0;
+/* @var \Jobs\Entity\Job $job */
+
+if ($job->isDraft()) {
+    $status = "draft";
+} else {
+    $status = $job->getStatus()->getName();
+}
+
+?>
+<h1>
+    <?php
+    if ('new' == $this->action):
+        echo $this->translate('Publish a job');
+    else:
+        echo sprintf($this->translate($job->isDraft()?'Create a job':'Edit the job %s'),'<i>'.$this->title.'</i>');
+    endif;
+    ?>
+    <small>(<?php echo $this->translate($status);?>)</small>
+    <?php
+
+        switch($status) {
+            case \Jobs\Entity\StatusInterface::ACTIVE:
+
+                $deactivateLink = $this->url(
+                               'lang/jobs/manage',
+                               [
+                                   'action' => 'edit',
+                               ],
+                               [
+                                   'query' => [
+                                       'id' => $job->getId(),
+                                       'status' => \Jobs\Entity\StatusInterface::INACTIVE
+                                   ],
+                               ]
+                );?>
+
+                <a href="<?=$deactivateLink?>" class="pull-right btn btn-danger"><?=$this->translate('Deactivate')?></a>
+    <?php       break;
+
+                case \Jobs\Entity\StatusInterface::INACTIVE:
+                    $activateLink = $this->url(
+                               'lang/jobs/manage',
+                               [
+                                   'action' => 'edit',
+                               ],
+                               [
+                                   'query' => [
+                                       'id' => $job->getId(),
+                                       'status' => \Jobs\Entity\StatusInterface::ACTIVE
+                                   ],
+                               ]
+                );?>
+
+                <a href="<?=$activateLink?>" class="pull-right btn btn-success"><?=$this->translate('Activate')?></a>
+
+    <?php       break;
+
+                case 'draft':
+                    ?>
+                    <a href="<?=$this->url('lang/jobs/manage', ['action' => 'delete'], ['query' => ['id' => $job->getId()]])?>"
+                       class="pull-right btn btn-danger"><?=$this->translate('Delete')?></a>
+     <?php          break;
+        }?>
+
+</h1>
+
+<?php
+$finishLabel = false;
+if ($job->isDraft()) {
+    $finishLabel = sprintf($this->translate('Publish job %s'),$total?$this->translate('chargeable'):'');
+} else if ($job->isActive()) {
+    $finishLabel = $this->translate('submit changes');
+}
+
+
+
+
+echo $this->formWizardContainer(
+                $this->form,'form-horizontal',
+                [ 'wizard' => [
+                    'finish_label' => $finishLabel,
+                    'finish_href' => $this->completionLink,
+                    'finish_enabled' => $this->jobvalid,
+                ]]
+); ?>
+
+
+
+        <?php if ($job->isDraft()):?>
+            <div id="job_incomplete" class="alert alert-warning " <?php echo (isset($this->jobvalid) && $this->jobvalid == true) ? 'style = "display: none;"' : ''; ?>>
+                <?php echo $this->translate('Your job position is incomplete.'); ?>
+                <span id="job_errormessages">
+                    <?php echo (isset($this->jobvalid) && $this->jobvalid == false && !empty($this->errorMessage)) ? ($this->errorMessage) : '';?>
+                </span>
+            </div>
+	<?php
+        /**
+         * if job is active, a user can inactivate the job or publish changes
+         */
+        ?>
+        <?php elseif ($job->getStatus() == \Jobs\Entity\Status::ACTIVE):?>
+            <div class="alert alert-info">
+                <?php echo $this->translate('Your job opening is online. You can publish minor changes or you can deactivate the job opening'); ?>
+                <a href="<?=$deactivateLink?>" class="btn btn-danger btn-xs pull-right"><?=$this->translate('Deactivate')?></a>
+             </div>
+	<?php
+        /**
+         * if job was created and is waiting for approval
+         */
+        ?>
+        <?php elseif ($job->getStatus() == \Jobs\Entity\Status::CREATED):?>
+            <div class="alert alert-info">
+                <?php echo $this->translate('Your job opening was successfully created and is waiting for approval.'); ?>
+            </div>
+	<?php
+        /**
+         * if is inactive
+         */
+        ?>
+        <?php elseif ($job->getStatus() == \Jobs\Entity\Status::INACTIVE):?>
+            <div class="alert alert-info">
+                <?php echo $this->translate('Your job opening is inactive. You can reactivate it. Chargeable channels are not updated.'); ?>
+                <a href="<?=$activateLink?>" class="btn btn-success btn-xs pull-right"><?=$this->translate('Activate')?></a>
+            </div>
+	<?php
+        /**
+         * if is expired
+         */
+        ?>
+        <?php elseif ($job->getStatus() == \Jobs\Entity\Status::EXPIRED):?>
+            <div class="alert alert-info">
+                <?php echo $this->translate('Your job was expired. You can reactivate you job opening. Chargeable channels are not updated.'); ?>
+            </div>
+	<?php
+        /**
+         * if job was rejected
+         */
+        ?>
+        <?php elseif ($job->getStatus() == \Jobs\Entity\Status::REJECTED):?>
+            <div class="alert alert-warning">
+                <?php echo $this->translate('Your job opening was rejected. Please correct the errors and republish it'); ?>
+            </div>
+        <?php endif?>
+        <?php
+              /*  echo '<a href="' . $this->pageLinkPrevious . '" class="btn btn-primary">' . $this->translate('Back') . '</a>' . PHP_EOL;
+                if ($this->job->isDraft()) {
+                    echo '<a id="finalize_jobentry" style="' . ($this->jobvalid?'':'display:none;') . '" href="' . $this->completionLink . '" class="btn btn-primary">' .
+                        sprintf($this->translate('Publish job %s'),$total?$this->translate('chargeable'):'') . '</a>' . PHP_EOL;
+                } elseif ($this->job->isActive()) {
+                    echo '<a id="finalize_jobentry" style="' . ($this->jobvalid?'':'display:none;') . '" href="' . $this->completionLink . '" class="btn btn-primary">' .
+                        $this->translate('submit changes') . '</a>' . PHP_EOL;
+                    $deactivateLink = $this->url(
+                                           'lang/jobs/deactivate',
+                                               array(
+                                               ),
+                                               array(
+                                                   'query' => array(
+                                                       'id' => $this->job->id
+                                                   )
+                                               )
+                    );
+                    echo '<a href="' . $deactivateLink . '" class="btn btn-primary">' . $this->translate('Deactivate') . '</a>' . PHP_EOL;
+                }
+                else {
+                }*/
+?>

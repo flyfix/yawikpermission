@@ -1,0 +1,40 @@
+<?php
+/**
+ * YAWIK
+ *
+ * @filesource
+ * @copyright (c) 2013 - 2016 Cross Solution (http://cross-solution.de)
+ * @license   MIT
+ */
+/**
+ * {{rtd: Renders default notification boxes.}}
+ */
+
+$messenger = $this->flashMessenger();
+$alert     = $this->plugin('alert');
+$translate = $this->plugin('translate');
+?>
+
+<div class="yk-notifications">
+<?php foreach (array('danger', 'warning', 'success', 'info') as $ns):
+    $messages = array_merge(
+        $messenger->getMessagesFromNamespace($ns),
+        $messenger->getCurrentMessagesFromNamespace($ns)
+    );
+
+    $messenger->clearCurrentMessagesFromNamespace($ns);
+    
+    foreach ($messages as $message):
+        $options = array();
+        $testJson = json_decode($message);
+        if (is_object($testJson)) {
+            $testJson = (array) $testJson;
+        }
+        if ( is_array($testJson) && json_last_error() == JSON_ERROR_NONE && array_key_exists('message', $testJson)) {
+            $message = $testJson['message'];
+            $options = $testJson;
+        }
+        echo $alert->render($ns, $translate($message), $options);
+    endforeach;
+endforeach ?>        
+</div>

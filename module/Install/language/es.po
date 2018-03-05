@@ -1,0 +1,167 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# Carsten Bleek <cbleek@yawik.org>, 2016
+msgid ""
+msgstr ""
+"Project-Id-Version: YAWIK\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-02-20 19:07+0100\n"
+"PO-Revision-Date: 2017-09-22 12:37+0000\n"
+"Last-Translator: Carsten Bleek <cbleek@yawik.org>\n"
+"Language-Team: Spanish (http://www.transifex.com/yawik/yawik/language/es/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: es\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: view/install/index/index.phtml:137
+msgid "PHP version not supported"
+msgstr "No se admite la versión de PHP"
+
+#: view/install/index/index.phtml:142
+#, php-format
+msgid ""
+"Sorry, YAWIK requires at least PHP 5.4.0 to run, but this server currently "
+"provides PHP %s."
+msgstr ""
+
+#: view/install/index/index.phtml:147
+msgid ""
+"Please ask your servers' administrator to install the proper PHP version."
+msgstr "Por favor, solicite al administrador de sus servidores para instalar la versión adecuada de PHP."
+
+#: view/install/index/installation.phtml:13 view/layout/layout.phtml:29
+msgid "Installation"
+msgstr "Instalación"
+
+#: view/install/index/installation.phtml:55
+msgid "Install"
+msgstr "Instalar"
+
+#: view/install/index/install.phtml:13
+#, php-format
+msgid ""
+"An administrator account with the login name \"%s\" was created "
+"successfully."
+msgstr ""
+
+#: view/install/index/install.phtml:18
+msgid "The base configuration file was successfully created."
+msgstr "El archivo de configuración de base se ha creado correctamente."
+
+#: view/install/index/install.phtml:21
+#, php-format
+msgid ""
+"The configuration file could not be created automatically. So please create "
+"a file called \"%s\" in the directory \"%s\" with the following content:"
+msgstr ""
+
+#: view/install/index/install.phtml:31
+msgid "Start using YAWIK"
+msgstr "Empezar a utilizar YAWIK"
+
+#: view/install/index/prerequisites.phtml:13
+msgid "Prerequisites"
+msgstr "Requisitos previos"
+
+#: view/install/index/prerequisites.phtml:28
+msgid "Creatable"
+msgstr "creatable"
+
+#: view/install/index/prerequisites.phtml:30
+msgid "Missing"
+msgstr "Desaparecido"
+
+#: view/install/index/prerequisites.phtml:34
+msgid "Not writable"
+msgstr "no se puede escribir"
+
+#: view/install/index/prerequisites.phtml:36
+msgid "Ok"
+msgstr "Bueno"
+
+#: view/install/index/prerequisites.phtml:48
+msgid ""
+"All required directories exists and have the needed permissions or can be "
+"created. You may savely continue with the installation."
+msgstr "Todos los directorios necesarios existe y tiene los permisos necesarios o pueden ser creados. Puede continuar con la instalación Savely."
+
+#: view/install/index/prerequisites.phtml:50
+msgid ""
+"Please note: It is not required for the config/autoload directory to be "
+"writable, but it will ease the installation as YAWIK can create the config "
+"files automatically. Consider giving write permission during installation "
+"and revoke it afterwards."
+msgstr "Tenga en cuenta: No es necesario para el directorio config / autocarga tener permiso de escritura, pero va a facilitar la instalación como YAWIK puede crear los archivos de configuración de forma automática. Considere dar permiso de escritura durante la instalación y revocar posteriormente."
+
+#: view/install/index/prerequisites.phtml:53
+msgid ""
+"YAWIK requires some directories to exist and have proper permissions, "
+"otherwise it is not possible to run YAWIK. Please ensure that all required "
+"directories either exist with the right permissions or at least are "
+"creatable during this installation process."
+msgstr "YAWIK requiere algunos directorios de existir y tener los permisos adecuados, de lo contrario no es posible ejecutar YAWIK. Asegúrese de que todos los directorios necesarios o bien existen con los permisos correctos o por lo menos son creatable durante este proceso de instalación."
+
+#: view/install/index/prerequisites.phtml:55
+msgid "Check again"
+msgstr "puedes volver a intentarlo"
+
+#: view/install/index/prerequisites.phtml:56
+msgid "Checking"
+msgstr "De cheques"
+
+#: view/error/index.phtml:14
+msgid "An error occurred"
+msgstr "Se ha producido un error"
+
+#: view/error/index.phtml:21
+msgid "Additional information"
+msgstr "Información adicional"
+
+#: view/error/index.phtml:24 view/error/index.phtml:48
+msgid "File"
+msgstr "Archivo"
+
+#: view/error/index.phtml:28 view/error/index.phtml:52
+msgid "Message"
+msgstr "Mensaje"
+
+#: view/error/index.phtml:32 view/error/index.phtml:56
+msgid "Stack trace"
+msgstr "Stack trace"
+
+#: view/error/index.phtml:42
+msgid "Previous exceptions"
+msgstr "Excepciones anteriores"
+
+#: view/error/index.phtml:71
+msgid "No Exception available"
+msgstr "No hay excepciones disponibles"
+
+#: language/_annotated_strings.php:3
+msgid "Database connection string"
+msgstr "cadena de conexión de base de datos"
+
+#: language/_annotated_strings.php:6
+msgid "Initial user name"
+msgstr "Nombre de usuario inicial"
+
+#: language/_annotated_strings.php:9
+msgid "Password"
+msgstr "Contraseña"
+
+#: language/_annotated_strings.php:12
+msgid "Email address for system messages"
+msgstr "dirección de correo electrónico para los mensajes del sistema"
+
+#: language/_annotated_strings.php:15
+msgid "Connecting the database failed: %databaseError%"
+msgstr ""
+
+#: language/_annotated_strings.php:18
+msgid "Invalid connection string"
+msgstr "cadena de conexión no válido"

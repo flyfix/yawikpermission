@@ -1,0 +1,19 @@
+/**
+* {{rtd: currently not used}}
+*/
+<?php if ($hasJobs):?>
+<ul class="nav nav-pills nav-stacked">
+
+<?php foreach (array('new' => $this->translate('new applications'),
+                    /* 'deleted' => $this->translate('deleted applications')*/) as $byParam => $label): ?>
+    <li<?php echo $byParam == $this->by ? ' class="active"' : '' ?>>
+        <a href="<?php echo $this->url('lang/applications', 
+            array(), 
+            array('query' => array_merge($this->params()->fromQuery(), array('by'=> $byParam))),
+            true)?>"><?php echo $label?><span class="badge"><?php echo $newApplications ?></span></a>
+    </li>
+<?php endforeach; ?>
+</ul>
+<?php endif; ?>
+
+

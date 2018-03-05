@@ -1,0 +1,312 @@
+<?php
+/**
+ * YAWIK
+ *
+ * @filesource
+ * @copyright (c) 2013 - 2016 Cross Solution (http://cross-solution.de)
+ * @license       MIT
+ */
+/**
+ * {{rtd: Renders a application as a simple HTML, used in the PDF generation and the forward mail }}
+ *
+ * This HTML is used to generate a PDF
+ *
+ * @see http://mpdf1.com/manual/index.php
+ *
+ * and this is used to generate the Mail, if an application is forwarded
+ * or if an applicant want's to get his application via CC.
+ *
+ * The HTML should be standalone. No external references.
+ *
+ */
+use Applications\Entity\StatusInterface as Status;
+
+/* @var Applications\Entity\Application $application */
+
+$contact = $application->getContact();
+$auth = $this->auth(); /* @var $auth \Auth\View\Helper\Auth */
+
+$this->headTitle($this->translate('Details'));
+?>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+
+    .header {
+        text-align: right;
+        border-bottom: 1px solid #000000;
+        font-size: 10pt;
+    }
+
+    .footer {
+        vertical-align: bottom;
+        font-size: 8pt;
+        color: #000000;
+    }
+
+    .address,
+    .personal-information {
+        vertical-align: top;
+        width: 100%;
+        border-spacing: 0;
+    }
+
+    .col1 {
+        width: 150px;
+        margin-right: 10px;
+        border-right: 1px solid #dedede;
+    }
+
+    table.list {
+        width: 100%;
+        border: 1px solid #e4e4e4;
+        border-spacing: 0;
+    }
+
+    table.list tr td {
+        vertical-align: top;
+        border-bottom: 1px solid #f4f4f4;
+        padding: 3px;
+    }
+
+    th {
+        background-color: #f4f4f4;
+    }
+
+    .photo {
+        width: 100px;
+    }
+</style>
+<?php if ($this->format == 'pdf'): ?>
+    <!--suppress HtmlUnknownTag -->
+    <sethtmlpageheader name="header" value="on" show-this-page="1"/>
+    <!--suppress HtmlUnknownTag -->
+    <htmlpageheader name="header">
+        <div class="header"><?= $this->translate('Application dated') ?>: <?= strftime('%x %X',
+                                                                                       $application->getDateCreated()
+                                                                                                   ->getTimestamp()
+            ); ?></div>
+    </htmlpageheader>
+    <!--suppress HtmlUnknownTag -->
+    <htmlpagefooter name="footer">
+        <!-- @todo the following header makes no sense in Emails. -->
+        <table width="100%" class="footer">
+            <tr>
+                <td width="33%">{DATE d.m.Y}</td>
+                <td width="33%" align="center">{PAGENO}/{nbpg}</td>
+                <td width="33%" style="text-align: right; "><?= $this->translate('Application') ?></td>
+            </tr>
+        </table>
+    </htmlpagefooter>
+    <!--suppress HtmlUnknownTag -->
+    <sethtmlpagefooter name="footer" value="on"/>
+<?php endif ?>
+<h1><?= $this->translate('application details') ?></h1>
+<p><?=sprintf($this->translate('You can see the application online on the %sfollowing link%s.'), '<a href="' . $this->serverUrl($this->url('lang/applications/detail', ['id' => $application->getId()], $auth->isLoggedIn() ? [] : ['query' => ['token' => $auth('token')]])) . '">', '</a>')?></p>
+<h2><?= $this->translate('personal information') ?></h2>
+<table class="personal-information">
+    <tr>
+        <td>
+            <?php $contact = $application->getContact(); ?>
+            <table class="address">
+                <tr>
+                    <td class="col1"><?= $this->translate('name') ?>:</td>
+                    <td><?= $contact->getFirstName() . ' ' . $contact->getLastName() ?></td>
+                </tr>
+                <?php if ($contact->getStreet()): ?>
+                    <tr>
+                        <td class="col1"><?= $this->translate('Street') ?>:</td>
+                        <td><?= $contact->getStreet() . ' ' . $contact->getHouseNumber() ?></td>
+                    </tr>
+                <?php endif; ?>
+                <?php if ($contact->getCity()): ?>
+                    <tr>
+                        <td class="col1"><?= $this->translate('City') ?>:</td>
+                        <td><?= $contact->getPostalCode() . ' ' . $contact->getCity() ?></td>
+                    </tr>
+                <?php endif; ?>
+                <tr>
+                    <td class="col1"><?= $this->translate('E-Mail') ?>:</td>
+                    <td><?= $contact->getEmail() ?></td>
+                </tr>
+                <tr>
+                    <td class="col1"><?= $this->translate('Phone') ?>:</td>
+                    <td><?= $contact->getPhone() ?></td>
+                </tr>
+            </table>
+        </td>
+        <td align="right">
+            <?php if ($contact->getImage()): ?>
+                <img src="data:;base64,<?= base64_encode($contact->getImage()->getContent()) ?>" class="photo">
+            <?php endif ?>
+        </td>
+    </tr>
+</table>
+
+<?php
+
+$facts = $application->getFacts();
+
+$expectedSalary = $facts->getExpectedSalary();
+
+?>
+
+
+<?php if ($facts->getExpectedSalary() or
+          $facts->getWillingnessToTravel() or
+          $facts->getEarliestStartingDate()
+): ?>
+
+    <h2><?= $this->translate('Facts') ?></h2>
+    <table width="100%">
+        <?php if ($facts->getWillingnessToTravel()): ?>
+            <tr>
+                <td class="col1"><?= $this->translate('Willingness to travel') ?>:</td>
+                <td><?= $facts->getWillingnessToTravel() ?></td>
+            </tr>
+        <?php endif ?>
+        <?php if ($facts->getEarliestStartingDate()): ?>
+            <tr>
+                <td class="col1"><?= $this->translate('Earliest starting date') ?>:</td>
+                <td><?= $facts->getEarliestStartingDate() ?></td>
+            </tr>
+        <?php endif ?>
+        <?php if ($facts->getExpectedSalary()): ?>
+            <tr>
+                <td class="col1"><?= $this->translate('Expected salary') ?>:</td>
+                <td><?= $facts->getExpectedSalary() ?></td>
+            </tr>
+        <?php endif ?>
+    </table>
+<?php endif ?>
+
+<h2><?= $this->translate('Cover Letter') ?></h2>
+<div class="row">
+    <?= nl2br($application->getSummary()) ?>
+</div>
+
+<?php
+$employments = $application->getCv()->getEmployments();
+?>
+
+<?php if (count($employments) > 0): ?>
+    <h2><?= $this->translate('work experience') ?></h2>
+    <table class="list">
+        <tr>
+            <th align="left"><?= $this->translate('Start') ?></th>
+            <th align="left"><?= $this->translate('End') ?></th>
+            <th><?= $this->translate('Description') ?></th>
+        </tr>
+        <?php foreach ($employments as $employment): /* @var \Cv\Entity\Employment $employment */ ?>
+            <tr>
+                <td><?= $this->DateFormat($employment->getStartDate(), 'middle', 'null', $this->lang, 'MMM Y') ?></td>
+                <td><?= $this->DateFormat($employment->getEndDate(), 'middle', 'null', $this->lang, 'MMM Y') ?></td>
+                <td><?= $employment->getDescription() ?></td>
+            </tr>
+        <?php endforeach; // employments?>
+    </table>
+<?php endif; ?>
+
+<?php
+$educations = $application->getCv()->getEducations();
+?>
+
+
+<?php if (count($educations) > 0): ?>
+    <h2><?= $this->translate('education and training') ?></h2>
+    <table class="list">
+        <tr>
+            <th align="left"><?= $this->translate('Start') ?></th>
+            <th align="left"><?= $this->translate('End') ?></th>
+            <th><?= $this->translate('Description') ?></th>
+        </tr>
+        <?php foreach ($educations as $education): /* @var \Cv\Entity\Education $education */ ?>
+            <tr>
+                <td><?= $this->DateFormat($education->getStartDate(), 'middle', 'null', $this->lang, 'MMM Y') ?></td>
+                <td><?= $this->DateFormat($education->getEndDate(), 'middle', 'null', $this->lang, 'MMM Y') ?></td>
+                <td><?= $education->getDescription() ?></td>
+            </tr>
+        <?php endforeach; // educations?>
+    </table>
+<?php endif; ?>
+
+<?php
+$skills = $application->getCv()->getSkills();
+?>
+
+
+<?php if (count($skills) > 0): ?>
+    <h2><?= $this->translate('personal skills') ?></h2>
+    <?php foreach ($skills as $kill): ?>
+        <div class="col-md-3"><?= $this->translate('native language') ?></div>
+        <div class="col-md-3">TODO</div>
+    <?php endforeach; // skills?>
+<?php endif; ?>
+
+<?php
+$profiles = $application->getProfiles();
+?>
+
+
+<?php if (count($profiles) > 0): ?>
+    <style>
+        .panel-heading {
+            background-color: #F5F5F5;
+            border-color: #DDDDDD;
+            color: #333333;
+        }
+
+        tr {
+            border-bottom: 1px solid rgba(0, 0, 0, 0);
+        }
+
+        .panel-heading {
+            margin-top: 10px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0);
+            padding: 10px 15px;
+        }
+
+        .yk-portrait {
+            font-size: 80px;
+            margin-right: 10px;
+            width: 100px;
+        }
+
+        .pull-left {
+            float: left;
+            width: 20%;
+        / / needed by mpdf
+        }
+
+        .table {
+            width: 100%;
+        }
+    </style>
+    <?php foreach ($profiles as $profile): /* @var Auth\Entity\SocialProfiles\ProfileInterface $profile */ ?>
+        <!--suppress HtmlUnknownTag -->
+        <pagebreak/>
+        <?= $this->partial('applications/manage/social-profile/' . strtolower($profile->getName()) . '.pdf.phtml',
+                           $profile->getData()
+        ) ?>
+    <?php endforeach; ?>
+<?php endif ?>
+
+<?php
+$attachments = $application->getAttachments();
+?>
+
+<?php if (count($attachments) > 0): ?>
+    <h2><?= $this->translate('Attachments') ?></h2>
+    <?php $html = "";
+    foreach ($attachments as $attachment): ?>
+        <div class="row show-grid">
+            <?php
+            // the displaying of the html is in charge of the PDF-Module
+            // look there at the file-rendering-method
+            echo $this->InsertFile($attachment) . '<br />';
+            ?>
+        </div>
+    <?php endforeach; // attachments ?>
+<?php endif; ?>
+

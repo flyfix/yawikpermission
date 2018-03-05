@@ -1,0 +1,64 @@
+<?php
+/*
+ * YAWIK
+ *
+ * @filesource
+ * @copyright (c) 2013 - 2016 Cross Solution (http://cross-solution.de)
+ * @license   MIT
+ */
+/**
+ * {{rtd: displays short info about publishing on the own homepage}}
+ *
+ * @package      YAWIK
+ * @subpackage   Applications
+ * @author       weitz@cross-solution.de
+ */
+?>
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">
+        <span>&times;</span>
+    </button>
+    <h4 class="modal-title"><?php echo $this->translate('Publish on your Homepage') ?></h4>
+</div>
+
+<div class="modal-body">
+    You can add your job postings into your personal homepage by adding the following javascript at the bottom of your
+    HTML code. The code renders a list of open vacancies of the company .
+<pre><code><?php
+
+        $code = <<<'EOC'
+  <script>
+      (function (window, document) {
+          var loader = function () {
+              var script = document.createElement("script"), tag = document.getElementsByTagName("script")[0];
+              script.src = "https://yawik.org/YawikWidget/yawik.min.js";
+              tag.parentNode.insertBefore(script, tag);
+          };
+          window.addEventListener ? window.addEventListener("load", loader, false) : window.attachEvent("onload", loader);
+      })(window, document);
+  </script>
+EOC;
+
+        echo htmlspecialchars($code);
+        ?></code></pre>
+
+    Place the following HTML Code into your HTML. It will be replaced with the list of open vacancies.
+    <pre>
+<code><?php
+
+    $code = <<<'EOC'
+<div id="YawikWidget"
+     data-organization="55ae775c6b10f8f05b8b457f"
+</div>
+EOC;
+
+    echo htmlspecialchars($code);
+
+    ?></code></pre>
+
+</div>
+
+<div class="modal-footer">
+    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+</div>

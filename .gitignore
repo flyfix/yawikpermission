@@ -1,0 +1,52 @@
+module/Organizations/test
+#
+# General text editors backup files
+#
+*~
+
+composer.phar
+phing.phar
+
+.idea
+
+#
+# phpdoc log files
+#
+phpdoc-*
+
+#
+# config files
+#
+config/phpdoc.xml
+config/autoload
+config/autoload.bak
+config/autoload/*.php
+
+test/config/*.local.php
+test/TestConfig.php
+test/phpunit.xml
+build.properties
+
+#
+#
+tmp
+docs
+log
+
+#
+# Exclude directories
+# 
+build
+components
+vendor
+cache
+node_modules
+ 
+#
+# Eclipse project files
+#
+.settings
+.buildpath
+.project
+nbproject
+

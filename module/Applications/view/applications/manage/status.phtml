@@ -1,0 +1,28 @@
+<?php
+/**
+ * YAWIK
+ *
+ * @filesource
+ * @copyright (c) 2013 - 2016 Cross Solution (http://cross-solution.de)
+ * @license   MIT
+ */
+
+$form->setAttributes(array(
+    'action' => $_SERVER['REQUEST_URI']
+));
+$form->get('mailText')->setAttribute('style', 'height: 250px');
+?>
+<div>
+<?php
+list ($email, $name) = each ($recipient);
+if (is_int($email)) {
+    $email = $name;
+    $name = '';
+}
+
+echo sprintf($this->translate("To") . ': ' . '"%s" &lt;%s&gt;<br>', $name, $email);
+
+?>
+</div>
+<?php
+echo $this->form($form, Core\Form\View\Helper\Form::LAYOUT_HORIZONTAL);

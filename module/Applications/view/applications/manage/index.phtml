@@ -1,0 +1,104 @@
+<?php
+/**
+ * YAWIK
+ *
+ * @filesource
+ * @copyright (c) 2013 - 2016 Cross Solution (http://cross-solution.de)
+ * @license   MIT
+ */
+
+/*
+ * If called via ajax (which means paginate or sort), we only need to render the table
+ */
+if ($this->isAjaxRequest) {
+    $template = sprintf(
+        'applications/manage/index.%s.ajax.phtml',
+        $this->acl()->isRole('recruiter') ? 'recruiter' : 'applicant'
+    );
+    echo $this->render($template);
+    return;
+}
+
+/* @var \Jobs\Entity\Job $job */
+$job = $this->job;
+
+if ($job):        $subTitle = sprintf($this->translate('for the job "%s"'), $job->getTitle());
+elseif ($this->byJobs): $subTitle = $this->translate('to all of your jobs');
+else:                   $subTitle = false;
+endif;
+
+$this->headTitle($this->translate('Applications') . ($subTitle ? ' ('. $subTitle . ')' : ''));
+
+$this->headScript()->appendFile($this->basePath('/Core/js/core.js'))
+                   ->appendFile($this->basePath('/Core/js/multiCheckbox.js'));
+$this->headScript()->appendFile($this->basepath('/Core/js/core.pagination-container.js'));
+$this->headScript()->appendFile($this->basePath('Applications/js/applications.index.js'));
+
+
+?>
+<h1>
+  <?php if ($this->acl()->isRole('recruiter')):?>
+    <?php echo $this->translate('List of received applications')?>
+    <?php if ($subTitle): ?>
+      <small><?php echo $subTitle ?></small>
+    <?php endif;?>
+  <?php else: ?>
+    <?php echo $this->translate('Overview of your sent applications')?>
+  <?php endif;?>
+</h1>
+<div id="apps-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3>header ...</h3>
+            </div>
+            <div class="modal-body">
+                body ...
+            </div>
+            <div class="modal-footer">
+                <button data-dismiss="modal" class="btn btn-default" type="button"><?php echo $this->translate('Cancel'); ?></button>
+                <button id="modal-submit" class="btn btn-primary"><?php echo $this->translate('Send mail'); ?></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<?php if ($this->acl()->isRole('recruiter')):?>
+  <nav class="navbar yk-toolbar">
+    <?php echo $this->searchForm($this->form); ?>
+  </nav>
+<?php endif;?>
+
+<div class="pagination-container" data-uri="<?php echo $this->url('lang/applications', array(),
+                  array('query' => $this->params()->fromQuery()), true) ?>">
+    <div class="pagination-content">
+<?php if ($this->acl()->isRole('recruiter')):?>
+  <?php echo $this->render('applications/manage/index.recruiter.ajax.phtml') ?>
+<?php else: ?>
+  <?php echo $this->render('applications/manage/index.applicant.ajax.phtml') ?>
+<?php endif?>
+        </div>
+</div>
+
+<div id="application-multiple-move-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="application-multiple-move-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="application-multiple-move-modal-label">
+                    <?=$this->translate('Move selected applications to Talent Pool')?>:
+                </h3>
+            </div>
+            <div class="modal-body">
+                <?=$this->translate('Are you sure you want to move selected applications to Talent Pool?')?>
+            </div>
+            <div class="modal-footer">
+                <form method="post" action="<?=$this->url('lang/applications/applications-list', ['action' => 'move'])?>">
+                    <button class="btn btn-default" data-dismiss="modal" aria-hidden="true"><?=$this->translate('Cancel') ?></button>
+                    <button type="submit" class="btn btn-primary"><?=$this->translate('Move applications to Talent Pool') ?></button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

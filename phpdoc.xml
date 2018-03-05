@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdoc>
+    <title>YAWIK - Applicant Tracking System</title>
+    <parser>
+        <target>tmp</target>
+    </parser>
+    <transformer>
+        <target>docs</target>
+    </transformer>
+    <files>
+        <directory>module/Core/*</directory>
+        <directory>module/Auth/*</directory>
+        <directory>module/Applications/*</directory>
+        <directory>module/Jobs/*</directory>
+        <directory>module/JobsByMail/*</directory>
+        <directory>module/Organizations/*</directory>
+        <directory>module/Orders/*</directory>
+        <directory>module/Pdf/*</directory>
+        <directory>module/Install/*</directory>
+        <directory>module/Geo/*</directory>
+        <directory>module/CompanyRegistration/*</directory>
+        <directory>module/Settings/*</directory>
+        <ignore>vendor/*</ignore>
+        <ignore>*/language/*</ignore>
+        <ignore>*/view/*</ignore>
+        <ignore>config/*</ignore>
+        <ignore>bin/*</ignore>
+        <ignore>test/*</ignore>
+    </files>
+</phpdoc>

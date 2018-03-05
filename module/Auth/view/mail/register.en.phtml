@@ -1,0 +1,24 @@
+<?php
+/**
+ * YAWIK
+ * Auth Module
+ *
+ * @copyright (c) 2013 - 2016 Cross Solution (http://cross-solution.de)
+ * @license   MIT
+ */
+/*
+ * Sends a confirmation link to the user, after registration
+ */
+?>
+<div class="yk-mail">
+<?= $this->partial('mail/header'); ?>
+<p>Dear <?= $this->name; ?>,</p>
+
+    <p>You've successfully registered on <?= $this->siteName; ?></p>
+
+    <p>please confirm your registration by clicking the following link:</p>
+
+<a href="<?= $this->confirmationlink; ?>"><?= $this->confirmationlink; ?></a>
+
+<?= $this->partial('mail/footer.en'); ?>
+</div>

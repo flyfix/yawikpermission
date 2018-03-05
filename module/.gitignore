@@ -1,0 +1,24 @@
+# ignore everything ...
+
+**
+
+# but the core Modules "Install", "Applications", "Auth", "Core", "Cv", "Geo", "Organizations"
+# and "Settings"
+
+!.gitignore
+!Admin
+!Applications
+!Auth
+!Core
+!Cv
+!Geo
+!Install
+!Jobs
+!Organizations
+!Pdf
+!Settings
+!Behat
+
+# 
+
+!README

@@ -1,0 +1,30 @@
+<?php
+/**
+ * {{rtd: Renders paginations}}
+ */
+
+ /*
+<div class="btn-group" data-toggle="buttons-radio" id="applications-list-switcher">
+<?php $lang = $this->params('lang');
+    foreach (array('me' => $this->translate('My applications', 'job' => $this->translate('Applications by jobs')) as $byParam => $label): ?>
+    <button type="button" class="btn<?php echo $byParam == $this->by ? ' active' : ''?>" id="applications-list-switcher-<?php echo $byParam ?>">
+    <?php echo $label ?></button>
+    <?php endforeach ?>
+</div> */?>
+
+<div id="jobs-list-filter">
+<?php if ($this->hasJobs):?>
+<ul class="nav nav-pills nav-stacked">
+
+<?php foreach (array('me' => $this->translate('My jobs'), 'all' => $this->translate('All jobs')) as $byParam => $label): ?>
+    <li<?php echo $byParam == $this->by ? ' class="active"' : '' ?>>
+        <a href="<?php echo $this->url('lang/jobs', 
+            array(), 
+            array('query' => array_merge($this->params()->fromQuery(), array('by'=> $byParam))),
+            true)?>"><?php echo $label?></a>
+    </li>
+<?php endforeach; ?>
+</ul>
+<?php endif; ?>
+</div>
+XX

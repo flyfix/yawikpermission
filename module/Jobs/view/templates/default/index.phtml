@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <?=$this->jsonLd($this->job)?>
+    <title><?=$this->headTitle?></title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <meta property="og:url" content="<?= $this->uriJob;?>" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="<?= $this->headTitle; ?> - <?= $this->organizationName;?>" />
+    <link rel="stylesheet" href="<?php echo $this->basePath("/Jobs/templates/default/job.css")?>" type="text/css">
+    <link href='//fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
+    <style>
+        form > div:hover {
+            background-color: #eee;
+            -webkit-box-shadow: 0px 0px 9px 3px rgba(0,0,0,0.55);
+            -moz-box-shadow: 0px 0px 9px 3px rgba(0,0,0,0.55);
+            box-shadow: 0px 0px 9px 3px rgba(0,0,0,0.55);
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <main itemscope itemtype="http://schema.org/JobPosting">
+        <!--
+
+          This the *default* Template. Take a look at the sources:
+ 
+          https://github.com/cross-solution/YAWIK/blob/develop/module/Jobs/public/templates/default/index.phtml
+
+          Or take a look at the docs
+          :
+          http://yawik.readthedocs.io/en/latest/modules/jobs/index.html#job-templates
+
+        -->
+        <div class="row">
+            <div class="one-half column" itemscope itemtype="http://schema.org/Organization">
+                <div itemprop="logo">
+                    <img src="<?= $this->uriLogo?>" alt="<?= $this->organizationName?>">
+                </div>
+            </div>
+            <div class="one-half column right">
+            </div>
+        </div>
+
+        <p ><?=$this->descriptionEditable ?></p>
+        <div class="row">
+            <div class="twelve columns" itemprop="title">
+                <?php echo $this->title; ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="two-thirds column">
+                <div class="panel">
+                    <div class="panel-heading"><h4><?=$this->translate($this->labelRequirements);?></h4></div>
+                    <div class="panel-body" itemprop="responsibilities"><?=$this->requirements;?></div>
+                </div>
+                <div class="panel">
+                    <div class="panel-heading"><h4><?=$this->translate($this->labelQualifications);?></h4></div>
+                    <div class="panel-body" itemprop="qualifications"><?=$this->qualifications;?></div>
+                </div>
+
+            </div>
+            <div class="one-third column">
+                <div class="panel">
+                    <div class="panel-heading"><h4><?=$this->translate($this->labelBenefits);?></h4></div>
+                    <div class="panel-body" itemprop="jobBenefits"><?=$this->benefits;?></div>
+                </div>
+                <div itemscope itemtype="http://schema.org/Organization">
+                    <strong itemprop="name">
+                        <?= $this->organizationName?>
+                    </strong><br/>
+                    <address itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+                        <span itemprop="streetAddress"><?=$this->street?></span><br>
+                        <span itemprop="postalCode"><?=$this->postalCode?></span>
+                        <span itemprop="addressLocality"><?=$this->city?></span>
+                        <br><br>
+                        <span itemprop="telephone"><?=$this->phone?></span>
+                    </address>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="twelve columns">
+            </div>
+        </div>
+        <?=$this->jobApplyButtons(
+            $this->applyData,
+            [
+                'sendImmediately' => true,
+                'oneClickOnly' => false,
+                'defaultLabel' => 'Click here to apply',
+                'oneClickLabel' => null
+            ]
+        )?>
+    </main>
+    <footer><small>powered by <a href="http://yawik.org">YAWIK</a></small></footer>
+</div>
+</body>
+</html>

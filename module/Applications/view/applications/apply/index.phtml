@@ -1,0 +1,100 @@
+<?php
+/**
+ * YAWIK
+ *
+ * @filesource
+ * @copyright (c) 2013 - 2016 Cross Solution (http://cross-solution.de)
+ * @license   MIT
+ */
+
+$this->headTitle($this->translate('Apply'));
+
+$job = $this->application->getJob(); /* @var Jobs\Entity\Job $job */
+
+?>
+<h1><?= $this->translate('Application')?></h1>
+    <div class="row">
+        <div class="col-md-8">
+            <p class="lead">
+                <?php $href = $job->getLink() ? $job->getLink() : $this->url('lang/jobs/view', array(), array('query' => array('id' => $job->getId())), true); ?>
+                <?php printf($this->translate('Apply to "%s" from "%s"'),
+                            '<a href="'.$href.'" title="' .
+                                        $this->translate('click to open the job ad') . '">' .
+                            $this->escapehtml(strip_tags($job->getTitle())) . '</a>', $job->getCompany() ) ?>
+            </p>
+        </div>
+        <div class="col-md-4">
+            <?php if ($job->getOrganization() && $job->getOrganization()->getImages()->getThumbnail() &&  $job->getOrganization()->getOrganizationName()): ?>
+                <div>
+                    <img src="<?=$this->basePath($this->organizationImageCache->getUri($job->getOrganization()->getImages()->getThumbnail())) ?>">
+                </div>
+            <?php endif ?>
+        </div>
+    </div>
+    <?php
+    /**
+     * if Applicant tracking System is disabled
+     */
+
+    ?>
+
+
+<?php if ($this->success):
+    /*
+     * Application was successfully completed. 
+     */
+
+?>
+<div class="alert alert-success">
+    <p><?=$this->translate('your application was sent successfully') ?></p>
+</div>
+<div class="alert alert-info">
+    <?php if ($this->auth()->isLoggedIn()):?>
+    <p>
+        <?=sprintf(
+            $this->translate('The application was added to your %slist%s, so you can keep up-to-date with the process.'),
+            '<a class="alert-link" href="' . $this->url('lang/applications', array(), true) . '">',
+            '</a>'
+        )?>
+    </p>
+    <?php else: ?>
+    <p>
+        <?=$this->translate('Keep up-to-date with the process of your application by bookmarking this link:')?>
+    </p>
+    <p>
+        <?php 
+            $href = $this->url(
+                    'lang/applications/detail',
+                    ['id' => $this->application->getId()],
+                    ['force_canonical' => true],
+                    true
+                ) . '?token=' . $this->auth('token');
+            
+            echo $this->link($href, array('class' => 'alert-link'));
+        ?>
+    </p>
+    <?php endif ?>
+</div>
+<?php 
+
+else:
+
+    /*
+     * Display application form container and action buttons.
+     */
+
+echo $this->formContainer($form, Core\Form\View\Helper\Form::LAYOUT_HORIZONTAL);
+if ('recruiter-preview' == $this->application->getId()) {
+    ?>
+
+    <?php $this->alert()->info(array('dismissable' => false)) ?>
+    <h4><?=$this->translate('This is a preview of the application form for your job') ?></h4>
+    <p><?=$this->translate('You may expand any section and check the available fields, but you can not save anything.') ?></p>
+    <?=$this->alert()->end();
+
+} else { echo $this->partial('applications/apply/_buttons',
+                    array('application' => $this->application)
+);
+}
+?>
+<?php endif ?>

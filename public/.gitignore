@@ -1,0 +1,15 @@
+# ignore everything 
+
+**
+
+# but ...
+
+!.gitignore
+!.htaccess
+!index.php
+!images
+!css
+!css/*.css
+!js
+!js/*.js
+

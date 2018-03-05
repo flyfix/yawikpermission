@@ -1,0 +1,56 @@
+<?php
+
+$options = array(
+       /*
+        * default email address, which is used in FROM headers of system mails like "new registration",
+        * "forgot password",..
+        */
+        'fromEmail' => 'email@example.com',
+
+        /*
+        * default name address, which is used in FROM headers of system mails like "new registration",
+        * "forgot password",..
+        */
+        'fromName' => 'YAWIK Website',
+
+        /*
+        * Subject of your registration Mail
+        */
+        'mailSubjectRegistration' => 'your registration',
+
+        /*
+         * enable social networks for login and registration. The names must match the keys used in 
+         * in the 'hybridauth' section of you module.auth.global.php file
+         */
+         'enableLogins' => ['linkedin','github','xing','google','facebook'],
+
+        /*
+         * if true, users are allowed to register.
+         */
+         'enableRegistration' => true,
+
+        /*
+         * if true, a mail will be send to the admin email when an user registers.
+         */
+         //'notifyOnRegistration' => false,
+
+         /*
+          * The email address to send all notifications related to the auth module to.
+          */
+         //'notificationEmail' => '',
+
+         /*
+          * Language to send the notificartions in
+          */
+         //'notificationLanguage' => 'en',
+
+        /*
+         * if true, users can reset their password.
+         */
+         'enableResetPassword' => true,
+
+    );
+
+### do not edit below ###
+
+return [ 'options' => [ 'Auth/Options' => [ 'options' => $options ] ] ];

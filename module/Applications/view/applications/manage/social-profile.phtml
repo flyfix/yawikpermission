@@ -1,0 +1,69 @@
+<?php
+/**
+ * YAWIK
+ *
+ * @filesource
+ * @copyright (c) 2013 - 2016 Cross Solution (http://cross-solution.de)
+ * @license   MIT
+ */
+
+$profile = $this->profile; /** @var \Auth\Entity\SocialProfiles\ProfileInterface $profile */
+?>
+<div class="modal-title" id="social-profile-label">
+<?=$profile->getName()?>
+</div>
+
+<div class="modal-body">
+<?=$this->partial('applications/manage/social-profile/'.strtolower($profile->getName()).'.phtml',$profile->getData()) ?>
+
+<div class="col-md-12 sp-raw-data-<?=$profile->getId() ?>">
+<h2 style="cursor:pointer">
+<?php echo $this->translate('Profile data') ?>
+<span class="pull-right fa fa-chevron-up"></span>
+</h2>
+<pre>
+<?php
+    function sp_export_data($data, $level=0)
+    {
+        foreach ($data as $key => $value) {
+            $indent = str_pad(' ', $level * 4);
+            if (is_array($value)) {
+                echo $indent . $key . ": {\n";
+                sp_export_data($value, $level+1);
+                echo $indent . "}\n";
+                continue;
+            }
+            
+            echo $indent . $key . ': ' . $value . "\n";
+        }
+    }
+    sp_export_data($profile->getData());
+    
+    ?>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function($) {
+	$(function() {
+		var $rawDataDiv = $('.sp-raw-data-<?=$profile->getId()?>');
+		var $toggle     = $rawDataDiv.find('h2');
+		var $display    = $rawDataDiv.find('pre');
+		
+		$display.hide();
+		$toggle.click(function() {
+			$display.slideToggle();
+			var $icon = $toggle.find('span');
+			if ($icon.hasClass('fa-chevron-up')) {
+				$icon.removeClass('fa-chevron-up').addClass('fa-chevron-down');
+			} else {
+				$icon.removeClass('fa-chevron-down').addClass('fa-chevron-up');
+			}
+			return false;
+		});
+	});
+})(jQuery);
+
+</script>
+</div>
+</div>
